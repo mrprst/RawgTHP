@@ -1,0 +1,1 @@
+{"mappings":"AAAA,KAAK,CAAC,MAAM,GAAG,CAAC;IACd,CAAE,GAAE,QAAQ;IACZ,CAAU,WAAE,QAAQ;IACpB,CAAY,aAAE,UAAU;AAC1B,CAAC","sources":["src/js/routes.js"],"sourcesContent":["const routes = {\n  '': PageList,\n  'pagelist': PageList,\n  'pagedetail': PageDetail,\n};"],"names":[],"version":3,"file":"index.a3681d70.js.map","sourceRoot":"/__parcel_source_root/"}
