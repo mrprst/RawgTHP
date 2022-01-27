@@ -1,8 +1,6 @@
-<!DOCTYPE html>
 <html>
   <head>
     <title>Basic routing</title>
-    <link rel="stylesheet" href="./style/index.scss" />
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
 
   </head>
@@ -40,13 +38,16 @@
       <p>Matito @ 2022 - Fictionnal website for exercice</p>
     </div>
 
-    <script src="./js/Home.js"></script>
     <script src="https://kit.fontawesome.com/09df9c0f6f.js" crossorigin="anonymous"></script>
-    <script src="./js/PageList.js"></script>
-    <script src="./js/PageDetail.js"></script>
-    <script src="./js/routes.js"></script>
+    <script type="module" src="./js/index.js"></script>
+    <script>
+      function filterUrl (value) {
+        var queryParams = "http://localhost:1234/#pagelist/"
+        let newUrl = queryParams.concat("platforms=" + value + "&ordering=-added");
+        window.location.href = newUrl
+      }
+    </script>
 
-    <script  type="module" src="./js/index.js"></script>
 
   </body>
 </html>

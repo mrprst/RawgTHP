@@ -105,8 +105,32 @@ h1 {
   }
 
   .game--details {
-    width: 90%;
-    height: 250px;
+    width: 290px;
+    height: 193px;
+    position: relative;
+  }
+
+  .game--image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .game--image:hover {
+    opacity: 0;
+  }
+
+  .game--moredetails {
+    position: absolute;
+    font-weight: normal;
+    width: 100%;
+  }
+
+  .game--title {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 }
 .articles {
@@ -116,10 +140,13 @@ h1 {
 
 .cardGame {
   width: 33%;
+  margin-bottom: 20px;
 }
 
 .game--tags {
   font-size: 13px;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .game--feed {
@@ -173,7 +200,8 @@ h1 {
 }
 #search-button:focus ~ #site-search {
   width: 300px;
-  height: 24px;
+  height: 40px;
+  padding: 10px;
   border-radius: 50px;
   background-color: transparent;
   border: 1px solid $primary-color;
@@ -185,7 +213,8 @@ h1 {
 }
 #site-search:focus {
   width: 300px;
-  height: 24px;
+  height: 40px;
+  padding: 10px;
   padding-left: 30px;
   border-radius: 50px;
   background-color: transparent;

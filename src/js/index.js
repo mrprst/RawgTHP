@@ -1,4 +1,5 @@
 import '../style/index.scss';
+import routes from './routes';
 
 
 const callRoute = () => {

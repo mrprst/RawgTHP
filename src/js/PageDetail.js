@@ -1,11 +1,12 @@
-
+// import { Test } from "./Pagelist.js"
+// console.log(Test())
 
 const PageDetail = (argument) => {
   const preparePage = () => {
     const cleanedArgument = argument.replace(/\s+/g, "-");
 
     const displayGame = (gameData) => {
-      const { background_image, website, name, rating, ratings_count, description, released, developers, platforms, publishers, genres, tags, stores, background_image_additional } = gameData;
+      const { background_image, website, name, rating, ratings_count, description, released, developers, platforms, publishers, genres, tags, stores, background_image_additional , id} = gameData;
       console.log(gameData)
       const headerDOM = document.querySelector(".heading--bottom");
       const dropdownDOM = document.querySelector(".games--dropdown");
@@ -13,6 +14,7 @@ const PageDetail = (argument) => {
       const articleDOM = document.querySelector(".page-detail .article");
       const buyDOM = document.querySelector(".page-detail .buy");
       const screenshotsDOM = document.querySelector(".page-detail .screenshots");
+      const trailersDOM = document.querySelector(".page-detail .trailers");
       const showmoreDOM = document.querySelector("#show-more");
 
       headerDOM.remove();
@@ -20,24 +22,41 @@ const PageDetail = (argument) => {
       showmoreDOM.remove();
       heroDOM.innerHTML = `
       <img class="hero-image" src="${background_image}">
-      <a href="${website}">
-        <div class="check-website">
+      <a href="${website}" target="_blank">
+        <div href="${website}" class="check-website">
           <span>Check Website</span>
           <span>▶</span>
         </div>
       </a>
       `;
+      function getTrailer(id) {
+        fetch(`https://api.rawg.io/api/games/${id}/movies?key=c0beb5c7d4924ac181a43fb802a18fbd`)
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          showTrailer(trailersDOM.querySelector("div.video-links"),response)
+
+        })
+        .catch((error) => {
+          console.error('Response error:', error.message);
+        });
+      }
+
+
       articleDOM.querySelector(".article--top h1.title").innerHTML = name;
       articleDOM.querySelector(".article--top p.rating").innerHTML = `${rating}/5 - ${ratings_count} votes`;
       articleDOM.querySelector(".article--middle p.description").innerHTML = description;
       articleDOM.querySelector(".article--bottom p.released").innerHTML += released;
-      articleDOM.querySelector(".article--bottom p.developers").innerHTML += nodeDetails(developers)
-      articleDOM.querySelector(".article--bottom p.platforms").innerHTML += gamePlatforms(platforms).join(",&nbsp");
-      articleDOM.querySelector(".article--bottom p.publishers").innerHTML += nodeDetails(publishers).join(",&nbsp");
-      articleDOM.querySelector(".article--bottom p.genres").innerHTML += nodeDetails(genres).join(",&nbsp");
-      articleDOM.querySelector(".article--bottom p.tags").innerHTML += nodeDetails(tags).join(",&nbsp");
+      articleDOM.querySelector(".article--bottom p.developers").innerHTML += `<a href='#pagelist/&dates=&developers=${developers[0].id}'>${nodeDetails(developers)}</a>`;
+      articleDOM.querySelector(".article--bottom p.platforms").innerHTML += `<a href='#pagelist/&dates=&platform=${platforms[0].id}'>${gamePlatforms(platforms).join(",&nbsp")}</a>`;
+      articleDOM.querySelector(".article--bottom p.publishers").innerHTML += `<a href='#pagelist/&dates=&publishers=${publishers[0].id}'>${nodeDetails(publishers).join(",&nbsp")}</a>`;
+      articleDOM.querySelector(".article--bottom p.genres").innerHTML += `<a href='#pagelist/&dates=&genres=${genres[0].id}'>${nodeDetails(genres).join(",&nbsp")}</a>`;
+      let smallTagList = nodeDetails(tags).slice(0, 9)
+      articleDOM.querySelector(".article--bottom p.tags").innerHTML += `<a href='#pagelist/&dates=&tags=${tags[0].id}'>${smallTagList.join(",&nbsp")}</a>`;
       buyDOM.querySelector("div.buy-links").innerHTML = storesPlatforms(stores).join("");
-      screenshotsDOM.querySelector("div.screenshots-links").innerHTML = `<img class="screenshots-img" src="${background_image}" /><img class="screenshots-img" src="${background_image_additional}" />`
+      screenshotsDOM.querySelector("div.screenshots-links").innerHTML = `<img class="screenshots-img" src="${background_image}" /><img class="screenshots-img" src="${background_image_additional}" />`;
+      trailersDOM.querySelector("div.video-links").innerHTML = getTrailer(id);
     };
 
     const fetchGame = (url, argument) => {
@@ -81,23 +100,21 @@ const PageDetail = (argument) => {
           <h1>SCREENSHOTS</h1>
           <div class="screenshots-links"></div>
         </div>
+        <div class="trailers">
+          <h1>TRAILERS</h1>
+          <div class="video-links"></div>
+        </div>
         <div class="similar">
           <h1>SIMILAR GAMES</h1>
         </div>
       </section>
     `;
 
-
-
-
-
     preparePage();
   };
 
   render();
 };
-
-
 
 
 function gamePlatforms(node) {
@@ -124,3 +141,10 @@ function storesPlatforms(node) {
   return arrPlatforms
 }
 
+const showTrailer = (placeholder,response) => {
+  placeholder.innerHTML =`<video controls width="100%"><source src="${response.results[Object.keys(response.results)[0]].data.max}" type="video/mp4">Sorry, your browser doesn't support embedded videos.</video>`
+}
+
+
+
+export default PageDetail

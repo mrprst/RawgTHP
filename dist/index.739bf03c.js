@@ -519,13 +519,16 @@ function hmrAcceptRun(bundle, id) {
 }
 
 },{}],"ebWYT":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 var _indexScss = require("../style/index.scss");
+var _routes = require("./routes");
+var _routesDefault = parcelHelpers.interopDefault(_routes);
 const callRoute = ()=>{
     const { hash  } = window.location;
     const pathParts = hash.substring(1).split('/');
     const pageName = pathParts[0];
     const pageArgument = pathParts[1] || '';
-    const pageFunction = routes[pageName];
+    const pageFunction = _routesDefault.default[pageName];
     if (pageFunction !== undefined) pageFunction(pageArgument);
 };
 window.addEventListener('hashchange', ()=>callRoute()
@@ -533,6 +536,288 @@ window.addEventListener('hashchange', ()=>callRoute()
 window.addEventListener('DOMContentLoaded', ()=>callRoute()
 );
 
-},{"../style/index.scss":"hN3b2"}],"hN3b2":[function() {},{}]},["l4AUa","ebWYT"], "ebWYT", "parcelRequire191b")
+},{"../style/index.scss":"hN3b2","./routes":"1LP9D","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hN3b2":[function() {},{}],"1LP9D":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _pageDetail = require("./PageDetail");
+var _pageDetailDefault = parcelHelpers.interopDefault(_pageDetail);
+var _pagelist = require("./Pagelist");
+var _pagelistDefault = parcelHelpers.interopDefault(_pagelist);
+const routes = {
+    '': _pagelistDefault.default,
+    'pagelist': _pagelistDefault.default,
+    'pagedetail': _pageDetailDefault.default
+};
+exports.default = routes;
+
+},{"./PageDetail":"8Dyl6","./Pagelist":"c8We6","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8Dyl6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+// import { Test } from "./Pagelist.js"
+// console.log(Test())
+const PageDetail = (argument1)=>{
+    const preparePage = ()=>{
+        const cleanedArgument = argument1.replace(/\s+/g, "-");
+        const displayGame = (gameData)=>{
+            const { background_image , website , name , rating , ratings_count , description , released , developers , platforms , publishers , genres , tags , stores , background_image_additional , id: id1  } = gameData;
+            console.log(gameData);
+            const headerDOM = document.querySelector(".heading--bottom");
+            const dropdownDOM = document.querySelector(".games--dropdown");
+            const heroDOM = document.querySelector(".page-hero");
+            const articleDOM = document.querySelector(".page-detail .article");
+            const buyDOM = document.querySelector(".page-detail .buy");
+            const screenshotsDOM = document.querySelector(".page-detail .screenshots");
+            const trailersDOM = document.querySelector(".page-detail .trailers");
+            const showmoreDOM = document.querySelector("#show-more");
+            headerDOM.remove();
+            dropdownDOM.remove();
+            showmoreDOM.remove();
+            heroDOM.innerHTML = `
+      <img class="hero-image" src="${background_image}">
+      <a href="${website}" target="_blank">
+        <div href="${website}" class="check-website">
+          <span>Check Website</span>
+          <span>▶</span>
+        </div>
+      </a>
+      `;
+            function getTrailer(id) {
+                fetch(`https://api.rawg.io/api/games/${id}/movies?key=c0beb5c7d4924ac181a43fb802a18fbd`).then((response)=>{
+                    return response.json();
+                }).then((response)=>{
+                    showTrailer(trailersDOM.querySelector("div.video-links"), response);
+                }).catch((error)=>{
+                    console.error('Response error:', error.message);
+                });
+            }
+            articleDOM.querySelector(".article--top h1.title").innerHTML = name;
+            articleDOM.querySelector(".article--top p.rating").innerHTML = `${rating}/5 - ${ratings_count} votes`;
+            articleDOM.querySelector(".article--middle p.description").innerHTML = description;
+            articleDOM.querySelector(".article--bottom p.released").innerHTML += released;
+            articleDOM.querySelector(".article--bottom p.developers").innerHTML += `<a href='#pagelist/&dates=&developers=${developers[0].id}'>${nodeDetails(developers)}</a>`;
+            articleDOM.querySelector(".article--bottom p.platforms").innerHTML += `<a href='#pagelist/&dates=&platform=${platforms[0].id}'>${gamePlatforms(platforms).join(",&nbsp")}</a>`;
+            articleDOM.querySelector(".article--bottom p.publishers").innerHTML += `<a href='#pagelist/&dates=&publishers=${publishers[0].id}'>${nodeDetails(publishers).join(",&nbsp")}</a>`;
+            articleDOM.querySelector(".article--bottom p.genres").innerHTML += `<a href='#pagelist/&dates=&genres=${genres[0].id}'>${nodeDetails(genres).join(",&nbsp")}</a>`;
+            let smallTagList = nodeDetails(tags).slice(0, 9);
+            articleDOM.querySelector(".article--bottom p.tags").innerHTML += `<a href='#pagelist/&dates=&tags=${tags[0].id}'>${smallTagList.join(",&nbsp")}</a>`;
+            buyDOM.querySelector("div.buy-links").innerHTML = storesPlatforms(stores).join("");
+            screenshotsDOM.querySelector("div.screenshots-links").innerHTML = `<img class="screenshots-img" src="${background_image}" /><img class="screenshots-img" src="${background_image_additional}" />`;
+            trailersDOM.querySelector("div.video-links").innerHTML = getTrailer(id1);
+        };
+        const fetchGame = (url, argument)=>{
+            fetch(`${url}/${argument}?key=774be2a6817d4369bef88bd479e5ab73`).then((response)=>response.json()
+            ).then((responseData)=>{
+                displayGame(responseData);
+            });
+        };
+        fetchGame("https://api.rawg.io/api/games", cleanedArgument);
+    };
+    const render = ()=>{
+        pageContent.innerHTML = `
+      <section class="page-hero">
+      </section>
+      <section class="page-detail">
+        <div class="article">
+          <div class="article--top">
+            <h1 class="title"></h1>
+            <p class="rating"></p>
+          </div>
+          <div class="article--middle">
+            <p class="description"></p>
+          </div>
+          <div class="article--bottom">
+            <p class="released" style="width: 25%"><b>Release Date</b><br></p>
+            <p class="developers" style="width: 25%"><b>Developer</b><br></p>
+            <p class="platforms" style="width: 25%"><b>Platforms</b><br></p>
+            <p class="publishers" style="width: 25%"><b>Publisher</b><br></p>
+            <p class="genres" style="width: 50%"><b>Genre</b><br></p>
+            <p class="tags" style="width: 50%"><b>Tags</b><br></p>
+          </div>
+        </div>
+        <div class="buy">
+          <h1>BUY</h1>
+          <div class="buy-links"></div>
+        </div>
+        <div class="screenshots">
+          <h1>SCREENSHOTS</h1>
+          <div class="screenshots-links"></div>
+        </div>
+        <div class="trailers">
+          <h1>TRAILERS</h1>
+          <div class="video-links"></div>
+        </div>
+        <div class="similar">
+          <h1>SIMILAR GAMES</h1>
+        </div>
+      </section>
+    `;
+        preparePage();
+    };
+    render();
+};
+function gamePlatforms(node) {
+    arrPlatforms = [];
+    node.forEach((e)=>{
+        arrPlatforms.push(`${e.platform.name}`);
+    });
+    return arrPlatforms;
+}
+function nodeDetails(node) {
+    arrNode = [];
+    node.forEach((e)=>{
+        arrNode.push(`${e.name}`);
+    });
+    return arrNode;
+}
+function storesPlatforms(node) {
+    arrPlatforms = [];
+    node.forEach((e)=>{
+        arrPlatforms.push(`<a href="https://${e.store.domain}" target="_blank"><p class="store-links">${e.store.name}</p></a>`);
+    });
+    return arrPlatforms;
+}
+const showTrailer = (placeholder, response)=>{
+    placeholder.innerHTML = `<video controls width="100%"><source src="${response.results[Object.keys(response.results)[0]].data.max}" type="video/mp4">Sorry, your browser doesn't support embedded videos.</video>`;
+};
+exports.default = PageDetail;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, '__esModule', {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === 'default' || key === '__esModule' || dest.hasOwnProperty(key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"c8We6":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+const showMore = document.getElementById('show-more');
+const pageContent = document.getElementById('pageContent');
+const choosePlatform = document.getElementById('platform');
+const showmoreDOM = document.querySelector("#show-more");
+let page = 1;
+// function Test () {
+//   console.log("test")
+// }
+// Test()
+const PageList = (argument1 = '')=>{
+    const preparePage = ()=>{
+        const cleanedArgument = argument1.replace(/\s+/g, "-");
+        const displayResults = (articles)=>{
+            const resultsContent = articles.map((article)=>`<article class="cardGame">
+              <div class="game--details" id="${article.id}">
+              <a href="#pagedetail/${article.id}">
+                <img class="game--image" src="${article.background_image}" >
+                <div class="game--moredetails">
+                  <p>${article.released}</p>
+                  <p>${article.rating}/5 - ${article.ratings_count} votes</p>
+                  <p class="game--tags">${GameTags(article).join(",&nbsp")}</p>
+                </div>
+              </a>
+              </div>
+              <a href="#pagedetail/${article.id}"><h2 class="game--title">${article.name}</h2></a>
+              <div class="game-platforms"></div>
+        </article>`
+            );
+            const resultsContainer = document.querySelector(".page-list .articles");
+            resultsContainer.innerHTML += resultsContent.join("\n");
+            articles.forEach((e)=>{
+                let gameId = document.getElementById(e.id);
+                GamePlatforms(e, gameId.nextElementSibling.nextElementSibling);
+            });
+        };
+        const fetchList = (url, argument, pagenumber)=>{
+            const finalURL = argument ? `${url}&search=${argument}&page=${pagenumber}` : `${url}&page=${pagenumber}&dates=2021-06-01,2022-12-01&ordering=-added`;
+            fetch(finalURL).then((response)=>response.json()
+            ).then((responseData)=>{
+                displayResults(responseData.results);
+            });
+        };
+        fetchList("https://api.rawg.io/api/games?key=774be2a6817d4369bef88bd479e5ab73&page_size=9", cleanedArgument, page);
+        showMore.addEventListener('click', ()=>{
+            if (page < 2) {
+                page += 1;
+                fetchList("https://api.rawg.io/api/games?key=774be2a6817d4369bef88bd479e5ab73&page_size=9", cleanedArgument, page);
+            } else {
+                fetchList("https://api.rawg.io/api/games?key=774be2a6817d4369bef88bd479e5ab73&page_size=9", cleanedArgument, page);
+                showmoreDOM.remove();
+            }
+        });
+    };
+    const render = ()=>{
+        pageContent.innerHTML = `
+      <section class="page-list">
+        <div class="articles"></div>
+      </section>
+    `;
+        preparePage();
+    };
+    render();
+};
+///////////////////// AUTO PLATFORM DROPDOWN /////////////////////////
+const Platforms = ()=>{
+    let platformDropdown = document.querySelector("#platform");
+    fetch('https://api.rawg.io/api/platforms/lists/parents?key=774be2a6817d4369bef88bd479e5ab73').then((response)=>response.json()
+    ).then((response)=>{
+        response.results.forEach((element)=>{
+            platformDropdown.innerHTML += `
+      <option value="${element.id}">${element.name}</option>
+      `;
+        });
+    });
+};
+Platforms();
+////////////////////// GET SUB NODE INFOS //////////////////
+function GamePlatforms(game, container) {
+    const gamePlatformsContent = game.parent_platforms.map((e)=>`<a href='#pagelist/&dates=&platform=${e.platform.id}'><i class="fab fa-${e.platform.slug}"></i>`
+    );
+    container.innerHTML += gamePlatformsContent.join("\n");
+}
+function GameTags(game) {
+    arrPlatforms = [];
+    game.tags.forEach((e)=>{
+        e.language == "eng" && arrPlatforms.push(e.name);
+    });
+    return arrPlatforms.slice(0, 9);
+}
+////////////// SEARCH MODULE /////////////////
+let submitButton = document.getElementById("search-button");
+let searchContent = document.getElementById("site-search");
+submitButton.addEventListener('click', ()=>{
+    searchContent.value == "" || changeUrl(searchContent.value);
+});
+searchContent.addEventListener('keypress', (e)=>e.key === 'Enter' ? changeUrl(searchContent.value) : null
+);
+function changeUrl(value) {
+    var queryParams = "http://localhost:1234/#pagelist/";
+    let newUrl = queryParams.concat(value);
+    window.location.href = newUrl;
+}
+exports.default = PageList;
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["l4AUa","ebWYT"], "ebWYT", "parcelRequire191b")
 
 //# sourceMappingURL=index.739bf03c.js.map
