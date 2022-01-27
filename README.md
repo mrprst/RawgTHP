@@ -10,6 +10,8 @@ This website has two main pages:
 - A Page list for the most anticipated videogames in the coming years
 - A Page details for each game.
 
+![Halo Exemple](./halo-ex.png)
+
 ## Source
 
 This project has been built with this template made for TheHackingProject bootcamp, [available here](https://drive.google.com/drive/folders/1VRJEUEv4Ybz9lI7NDFqMd2ctrPKUM6G8).
