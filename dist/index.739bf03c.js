@@ -677,7 +677,8 @@ function storesPlatforms(node) {
     return arrPlatforms;
 }
 const showTrailer = (placeholder, response)=>{
-    placeholder.innerHTML = `<video controls width="100%"><source src="${response.results[Object.keys(response.results)[0]].data.max}" type="video/mp4">Sorry, your browser doesn't support embedded videos.</video>`;
+    if (response.results.length > 0) placeholder.innerHTML = `<video controls width="100%"><source src="${response.results[Object.keys(response.results)[0]].data.max}" type="video/mp4">Sorry, your browser doesn't support embedded videos.</video>`;
+    else placeholder.innerHTML = `<p>No trailer available</p>`;
 };
 exports.default = PageDetail;
 
@@ -813,7 +814,7 @@ searchContent.addEventListener('keypress', (e)=>e.key === 'Enter' ? changeUrl(se
 );
 function changeUrl(value) {
     var queryParams = "http://localhost:1234/#pagelist/";
-    let newUrl = queryParams.concat(value);
+    let newUrl = queryParams.concat(value + "&ordering=-added");
     window.location.href = newUrl;
 }
 exports.default = PageList;

@@ -1,6 +1,7 @@
 // import { Test } from "./Pagelist.js"
 // console.log(Test())
 
+
 const PageDetail = (argument) => {
   const preparePage = () => {
     const cleanedArgument = argument.replace(/\s+/g, "-");
@@ -142,9 +143,11 @@ function storesPlatforms(node) {
 }
 
 const showTrailer = (placeholder,response) => {
+  if (response.results.length > 0) {
   placeholder.innerHTML =`<video controls width="100%"><source src="${response.results[Object.keys(response.results)[0]].data.max}" type="video/mp4">Sorry, your browser doesn't support embedded videos.</video>`
+} else {
+  placeholder.innerHTML =`<p>No trailer available</p>`
 }
-
-
+}
 
 export default PageDetail

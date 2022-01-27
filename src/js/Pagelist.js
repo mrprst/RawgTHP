@@ -3,6 +3,7 @@ const pageContent = document.getElementById('pageContent')
 const choosePlatform = document.getElementById('platform')
 const showmoreDOM = document.querySelector("#show-more");
 
+
 let page = 1
 
 // function Test () {
@@ -122,7 +123,7 @@ searchContent.addEventListener('keypress', e => e.key === 'Enter' ? changeUrl(se
 
 function changeUrl (value) {
 var queryParams = "http://localhost:1234/#pagelist/"
-let newUrl = queryParams.concat(value);
+let newUrl = queryParams.concat(value + "&ordering=-added");
 window.location.href = newUrl
 }
 
